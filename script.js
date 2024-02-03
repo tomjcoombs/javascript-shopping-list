@@ -44,16 +44,14 @@ function createCrossButton(className) {
 }
 
 function createIcon(className) {
-    // create icon tag
-    const icon = document.createElement('i');
-    icon.className = className;
+  // create icon tag
+  const icon = document.createElement('i');
+  icon.className = className;
 
-    return icon;
+  return icon;
 }
 
 function removeItem(e) {
-  console.log(e.target);
-
   const item = e.target;
   if(item.tagName === 'I' && item.parentElement.classList.contains("remove-item")) {
     const button = item.parentElement;
@@ -76,9 +74,8 @@ function removeAllItems(e) {
 
 function checkUI() {
   const hasListItems = itemList.querySelectorAll('li');
-  // console.log('display', filter.style.display);
   
-  if(hasListItems.length === 0) {
+  if (hasListItems.length === 0) {
     filter.style.display = 'none';
     clearAllButton.style.display = 'none';
   } else {
@@ -97,15 +94,9 @@ function filterList(e) {
   const listItems = itemList.querySelectorAll('li');
   listItems.forEach(item => {
 
-    const x = item.firstChild;
-    console.log(x.includes(searchTerm));
-    // console.log(item.firstChild.includes(searchTerm));
-    // if (!item.firstChild.includes(searchTerm)) {
-    //   item.style.display = 'none';
-    // }
-  })
-  
-  
+  const x = item.firstChild;
+  console.log(x.includes(searchTerm));
+  }) 
 }
 
 // Event Listeners
