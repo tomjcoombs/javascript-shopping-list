@@ -2,7 +2,7 @@ const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
 const clearAllButton = document.getElementById('clear');
-const filter = document.getElementById('filter');
+const filter = document.querySelector('.filter'); // change to query selector by class
 const filterInput = document.getElementById('filter');
 function addItem(e) {
   e.preventDefault();
@@ -84,18 +84,23 @@ function checkUI() {
   }
 }
 
-let searchTerm = '';
+
 
 function filterList(e) {
-  // console.log(e.key);
-  searchTerm += e.key;
+  let searchTerm = filterInput.value;
 
-  // const items = itemList.children;
   const listItems = itemList.querySelectorAll('li');
   listItems.forEach(item => {
 
-  const x = item.firstChild;
-  console.log(x.includes(searchTerm));
+    const itemText = item.firstChild;
+
+    // if the text is not included hide the list item
+    if (!itemText.textContent.includes(searchTerm)) {
+      item.style.display = 'none';
+    } else {
+      item.style.display = '';
+    }
+
   }) 
 }
 
@@ -104,4 +109,4 @@ itemForm.addEventListener('submit', addItem);
 itemList.addEventListener('click', removeItem);
 clearAllButton.addEventListener('click', removeAllItems);
 window.addEventListener('load', checkUI);
-filterInput.addEventListener('keydown', filterList)
+filterInput.addEventListener('keyup', filterList);
