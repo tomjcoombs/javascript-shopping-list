@@ -4,6 +4,8 @@ const itemList = document.getElementById('item-list');
 const clearAllButton = document.getElementById('clear');
 const filter = document.querySelector('.filter'); // change to query selector by class
 const filterInput = document.getElementById('filter');
+const formButton = itemForm.querySelector('button');
+let isEditMode = false;
 
 function onAddItemSubmit(e) {
   e.preventDefault();
@@ -13,6 +15,13 @@ function onAddItemSubmit(e) {
   if (newItem === '') {
     alert('Please add an item');
     return;
+  }
+
+  if (isEditMode) {
+    const editItem = document.querySelector('.edit-mode');
+    removeItem(editItem);
+    removeItemFromLocalStorage(editItem.textContent);
+    editItem.classList('edit-mode').remove();
   }
 
   addItemToDOM(newItem);
@@ -83,22 +92,41 @@ function displayListItems() {
   checkUI();
 }
 
-function removeItem(e) {
+function onItemClick(e) {
+  isEditMode = true;
+
+  itemList
+    .querySelectorAll('li')
+    .forEach(item => item .classList.remove('edit-mode'));
+
   const item = e.target;
+
   if(item.tagName === 'I' && item.parentElement.classList.contains("remove-item")) {
     const button = item.parentElement;
-    const li = button.parentElement;
+    const itemToRemove = button.parentElement;
+    removeItem(itemToRemove);
+    removeItemFromLocalStorage(itemToRemove.innerText);
+  } else {
+    setItemToEdit(e.target);
+  }
+}
 
+function setItemToEdit(item) {
+  isEditMode = true;
+  item.classList.add('edit-mode');
+
+  formButton.style.backgroundColor = 'green';
+  formButton.innerHTML = '<i class="fa-solid fa-pen"></i> Update Item';
+
+  itemInput.value = item.innerText;
+}
+
+function removeItem(item) {
     if(confirm('are you sure?')) {
-      li.remove();
-
-      const liText = li.innerText;
-      removeItemFromLocalStorage(liText);
-
+      item.remove();
       checkUI();
     }
   }
-}
 
 function removeAllItems(e) {
   while(itemList.firstChild) {
@@ -150,7 +178,7 @@ function checkUI() {
 function init() {
 // Event Listeners
 itemForm.addEventListener('submit', onAddItemSubmit);
-itemList.addEventListener('click', removeItem);
+itemList.addEventListener('click', onItemClick);
 clearAllButton.addEventListener('click', removeAllItems);
 document.addEventListener('DOMContentLoaded', checkUI);
 document.addEventListener('DOMContentLoaded', displayListItems);
